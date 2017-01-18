@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ssm-controller" />
+        <module name="ssm-framework" />
+        <module name="ssm-model" />
+        <module name="ssm-persist" />
+        <module name="ssm-utils" />
+        <module name="ssm-web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ssm-controller" target="1.5" />
+      <module name="ssm-framework" target="1.5" />
+      <module name="ssm-model" target="1.5" />
+      <module name="ssm-persist" target="1.5" />
+      <module name="ssm-project" target="1.5" />
+      <module name="ssm-utils" target="1.5" />
+      <module name="ssm-web" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
