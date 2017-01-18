@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+     
+     <!-- 配置文件获取 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+       	<property name="location" value="classpath:properties/jdbc.properties"/>
+    </bean>
+
+    <!-- mysql数据源-->
+    <bean id="mySqlDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbc.mysql.driver}"/>
+        <property name="url" value="${jdbc.mysql.url}"/>
+        <property name="username" value="${jdbc.mysql.username}"/>
+        <property name="password" value="${jdbc.mysql.password}"/>
+        <!-- 初始化连接数，默认0 -->
+        <property name="initialSize" value="${jdbc.initialSize}"/>
+        <!-- 连接池中最少空闲连接数，默认0，低于则创建新的连接 -->
+        <property name="minIdle" value="${jdbc.minIdle}"/>
+        <!-- 连接池中最多空闲连接数，默认8，超过的空闲连接将被释放 -->
+        <property name="maxIdle" value="${jdbc.maxIdle}"/>
+        <!-- 连接池中支持的最大连接数，默认8 -->
+        <property name="maxActive" value="${jdbc.maxActive}"/>
+        <!-- 连接池中连接用完时，新的请求等待时间，毫秒，默认无限 -->
+        <property name="maxWait" value="${jdbc.maxWait}"/>
+        <property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}"/>
+        <!-- 连接泄露时是否打印 -->
+        <property name="testWhileIdle" value="${jdbc.testWhileIdle}"/>
+        <!-- 空闲连接检查数量 -->
+        <property name="numTestsPerEvictionRun" value="${jdbc.numTestsPerEvictionRun}"/>
+        <!-- 以下两个一起使用，前者根据时间检查空闲连接，把空闲时间超过后者的连接断开，直到连接池中的连接数到middle为止 空闲连接检查时间（毫秒） -->
+        <property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}"/>
+        <!-- 连接池连接可空闲的时间 -->
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}"/>
+        <!-- sql检查，用来验证从连接池取出的连接，在将连接返回给调用者之前 -->
+        <property name="validationQuery" value="SELECT 1"/>
+        <!-- 取得对象时是否进行验证，检查对象是否有效 -->
+        <property name="testOnBorrow" value="true"/>
+        <!-- 空闲时是否进行验证，检查对象是否有效 -->
+        <property name="testOnReturn" value="true"/>
+    </bean>
+    
+    <!-- 配置mybatis的sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="mySqlDataSource" />
+        <property name="typeAliasesPackage" value="com.cb"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+    
+    <!-- 映射含有@Repository的类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.cb" />
+        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
+    </bean>
+    
+    <!-- (事务管理)-->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="mySqlDataSource" />
+    </bean>
+    
+    <!-- 配置事务通知属性 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!-- 定义事务传播属性 -->
+        <tx:attributes>
+            <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="edit*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="new*" propagation="REQUIRED" />
+            <tx:method name="set*" propagation="REQUIRED" />
+            <tx:method name="remove*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="change*" propagation="REQUIRED" />
+            <tx:method name="get*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="find*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="load*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="*" propagation="REQUIRED" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+    
+    <!-- 配置事务切面 -->
+    <aop:config>
+        <aop:pointcut id="serviceOperation"
+        expression="execution(* com.cb.service.*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation" />
+    </aop:config>
+</beans>
