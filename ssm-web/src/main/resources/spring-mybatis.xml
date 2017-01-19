@@ -3,20 +3,23 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
-       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
-     
-     <!-- 配置文件获取 -->
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <context:component-scan base-package="com.cb" />
+    <!-- 配置文件获取 -->
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
        	<property name="location" value="classpath:properties/jdbc.properties"/>
     </bean>
 
     <!-- mysql数据源-->
-    <bean id="mySqlDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
           destroy-method="close">
-        <property name="driverClassName" value="${jdbc.mysql.driver}"/>
+        <property name="driverClassName" value="${jdbc.mysql.driver}" />
         <property name="url" value="${jdbc.mysql.url}"/>
         <property name="username" value="${jdbc.mysql.username}"/>
         <property name="password" value="${jdbc.mysql.password}"/>
@@ -46,24 +49,24 @@
         <!-- 空闲时是否进行验证，检查对象是否有效 -->
         <property name="testOnReturn" value="true"/>
     </bean>
-    
-    <!-- 配置mybatis的sqlSessionFactory -->
+
+    <!-- mybatis和spring完美整合，不需要mybatis的配置映射文件 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="mySqlDataSource" />
-        <property name="typeAliasesPackage" value="com.cb"/>
-        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 自动扫描mapping.xml文件 -->
+        <property name="mapperLocations" value="classpath:mapping/*.xml"/>
     </bean>
-    
-    <!-- 映射含有@Repository的类 -->
+
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.cb" />
-        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
+        <property name="basePackage" value="com.cb.mybatis.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
-    
+
     <!-- (事务管理)-->
     <bean id="transactionManager"
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="mySqlDataSource" />
+        <property name="dataSource" ref="dataSource" />
     </bean>
     
     <!-- 配置事务通知属性 -->
@@ -72,17 +75,11 @@
         <tx:attributes>
             <tx:method name="insert*" propagation="REQUIRED" />
             <tx:method name="update*" propagation="REQUIRED" />
-            <tx:method name="edit*" propagation="REQUIRED" />
-            <tx:method name="save*" propagation="REQUIRED" />
             <tx:method name="add*" propagation="REQUIRED" />
-            <tx:method name="new*" propagation="REQUIRED" />
-            <tx:method name="set*" propagation="REQUIRED" />
             <tx:method name="remove*" propagation="REQUIRED" />
             <tx:method name="delete*" propagation="REQUIRED" />
-            <tx:method name="change*" propagation="REQUIRED" />
             <tx:method name="get*" propagation="REQUIRED" read-only="true" />
             <tx:method name="find*" propagation="REQUIRED" read-only="true" />
-            <tx:method name="load*" propagation="REQUIRED" read-only="true" />
             <tx:method name="*" propagation="REQUIRED" read-only="true" />
         </tx:attributes>
     </tx:advice>
@@ -90,7 +87,7 @@
     <!-- 配置事务切面 -->
     <aop:config>
         <aop:pointcut id="serviceOperation"
-        expression="execution(* com.cb.service.*.*(..))" />
+        expression="execution(* com.cb.mybatis.service.*.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation" />
     </aop:config>
 </beans>

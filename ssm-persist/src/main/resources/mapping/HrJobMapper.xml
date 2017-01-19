@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    
+     PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"    
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<!-- namespace 和Mapper接口的完全限定名一致 --> 
+<mapper namespace="com.cb.mybatis.mapper.HrJobMapper">
+	<sql id="Base_Column_List">
+		sn,jobTitle,companyName,companyScale,companyArea,pay,city,experience,degree,jobType
+	</sql>
+
+	<select id="getHrJob"  resultType="com.cb.model.HRJob">
+		SELECT <include refid="Base_Column_List"/> FROM hrjob WHERE sn = #{sn}
+	</select>
+</mapper>

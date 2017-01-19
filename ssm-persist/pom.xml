@@ -14,13 +14,21 @@
     <dependencies>
         <dependency>
             <groupId>com.chengbo</groupId>
-            <artifactId>ssm-framework</artifactId>
+            <artifactId>ssm-utils</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.chengbo</groupId>
-            <artifactId>ssm-utils</artifactId>
+            <artifactId>ssm-model</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.chengbo</groupId>
+            <artifactId>ssm-framework</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <finalName>ssm-persist</finalName>
+    </build>
 </project>
