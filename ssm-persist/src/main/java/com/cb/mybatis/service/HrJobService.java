@@ -5,6 +5,7 @@ import com.cb.mybatis.mapper.HrJobMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class HrJobService {
@@ -12,7 +13,7 @@ public class HrJobService {
 	@Resource
 	private HrJobMapper hrJobMapper;
 
-	public HRJob getHrJob(int sn){
-		return hrJobMapper.getHrJob(sn);
+	public List<HRJob> getHrJob(){
+		return hrJobMapper.getHrJob();
 	}
 }

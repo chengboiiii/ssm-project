@@ -23,12 +23,10 @@
         <property name="maxInMemorySize" value="4096"/>
     </bean>
     
-    <!-- 针对freemarker的视图解析器配置 -->
+    <!-- 视图解析器配置 -->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="cache" value="true" />
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
-        <property name="contentType" value="text/html;charset=UTF-8"/>
     </bean>
 
 </beans>

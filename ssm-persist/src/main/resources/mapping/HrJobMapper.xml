@@ -9,7 +9,11 @@
 		sn,jobTitle,companyName,companyScale,companyArea,pay,city,experience,degree,jobType
 	</sql>
 
-	<select id="getHrJob"  resultType="com.cb.model.HRJob">
-		SELECT <include refid="Base_Column_List"/> FROM hrjob WHERE sn = #{sn}
+	<resultMap id="jobInfo" type="com.cb.model.HRJob">
+		<id property="sn" column="sn"/>
+	</resultMap>
+
+	<select id="getHrJob"  resultMap="jobInfo">
+		SELECT <include refid="Base_Column_List"/> FROM hrjob
 	</select>
 </mapper>
