@@ -15,14 +15,12 @@ public class SessionListener implements HttpSessionListener{
 
     public void sessionCreated(HttpSessionEvent event){
         HttpSession session = event.getSession();
-        System.out.print("创建了一个Session连接:[" + session.getId() + "]");
         logger.info("创建了一个Session连接:[" + session.getId() + "]");
         setAllUserNumber(1);
     }
 
     public void sessionDestroyed(HttpSessionEvent event) {
         HttpSession session = event.getSession();
-        System.out.print("销毁了一个Session连接:[" + session.getId() + "]");
         logger.info("销毁了一个Session连接:[" + session.getId() + "]");
         //if (getAllUserNumber() > 0) {
         //   logger.info("销毁了一个Session连接:[" + session.getId() + "]");

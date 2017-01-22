@@ -17,6 +17,11 @@
             <artifactId>ssm-model</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.chengbo</groupId>
+            <artifactId>ssm-utils</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!--spring 依赖包 -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -68,6 +73,10 @@
             <artifactId>spring-session</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+        </dependency>
         <!--mybatis 依赖包 -->
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -159,6 +168,11 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-core</artifactId>
         </dependency>
     </dependencies>
 </project>

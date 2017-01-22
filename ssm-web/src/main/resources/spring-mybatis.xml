@@ -10,10 +10,11 @@
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
+    <context:annotation-config/>
     <context:component-scan base-package="com.cb" />
     <!-- 配置文件获取 -->
-    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-       	<property name="location" value="classpath:properties/jdbc.properties"/>
+    <bean class="com.cb.utils.Properties.PropertiesUtil">
+       	<property name="locations" value="classpath:properties/*.properties"/>
     </bean>
 
     <!-- mysql数据源-->
@@ -99,4 +100,6 @@
         expression="execution(* com.cb.mybatis.service.*.*(..))" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation" />
     </aop:config>
+
+    <import resource="activemq.xml"/>
 </beans>
