@@ -28,12 +28,12 @@ public class HrJobController {
         PageHelper.startPage(1,10);
         List<HRJob> list = hrjobService.getHrJob();
         PageInfo<HRJob> pageInfo = new PageInfo<HRJob>(list);
-        System.out.print(JSON.toJSON(pageInfo));
-        Email email = new Email();
-        email.setSendTo("2582949813@qq.com");
-        email.setBody("<p>哈哈哈</P>");
-        email.setTopic("测试");
-        queueSender.send("emailSender",email);
+  //      System.out.print(JSON.toJSON(pageInfo));
+//        Email email = new Email();
+//        email.setSendTo("2582949813@qq.com");
+//        email.setBody("<p>哈哈哈</P>");
+//        email.setTopic("测试");
+//        queueSender.send("emailSender",email);
         return "index";
     }
 }

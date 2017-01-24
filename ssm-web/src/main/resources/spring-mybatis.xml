@@ -102,4 +102,5 @@
     </aop:config>
 
     <import resource="activemq.xml"/>
+    <import resource="redis.xml"/>
 </beans>
